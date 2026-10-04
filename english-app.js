@@ -410,6 +410,21 @@ function submitTest() {
 }
 
 function sendToEmail() {
+    // Calculate level
+    const percentage = Math.round((userData.score / userData.totalQuestions) * 100);
+    let level = '';
+    if (percentage >= 90) {
+        level = 'Продвинутый (C1-C2)';
+    } else if (percentage >= 75) {
+        level = 'Выше среднего (B2)';
+    } else if (percentage >= 60) {
+        level = 'Средний (B1)';
+    } else if (percentage >= 40) {
+        level = 'Ниже среднего (A2)';
+    } else {
+        level = 'Начальный (A1)';
+    }
+    
     // Prepare email content
     let emailBody = `РЕЗУЛЬТАТЫ ТЕСТА ПО АНГЛИЙСКОМУ ЯЗЫКУ\n\n`;
     emailBody += `Имя: ${userData.firstName} ${userData.lastName}\n`;
@@ -417,7 +432,8 @@ function sendToEmail() {
     emailBody += `Телефон: ${userData.phone}\n`;
     emailBody += `Email: ${userData.email}\n`;
     emailBody += `Дата: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}\n\n`;
-    emailBody += `РЕЗУЛЬТАТ: ${userData.score} из ${userData.totalQuestions} (${Math.round((userData.score / userData.totalQuestions) * 100)}%)\n\n`;
+    emailBody += `РЕЗУЛЬТАТ: ${userData.score} из ${userData.totalQuestions} (${percentage}%)\n`;
+    emailBody += `УРОВЕНЬ: ${level}\n\n`;
     emailBody += `ПОДРОБНЫЕ ОТВЕТЫ:\n\n`;
     
     userData.answers.forEach((answer, index) => {
